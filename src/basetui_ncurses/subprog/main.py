@@ -8,7 +8,7 @@ from ..subprog_template import SubProgTemplate
 FLAGS = []
 
 
-class twModes(Enum):
+class fvModes(Enum):
     TEXT = 0
     PWD = 1
 
@@ -20,12 +20,12 @@ class FileViewer(SubProgTemplate):
         self.maxtlen = 0
         self.vpos = 0
         self.hpos = 0
-        self.mode = twModes.TEXT
+        self.mode = fvModes.TEXT
         for f in FLAGS:
             setattr(self.flags, f, False)
 
     def handleInput(self, inp):
-        self.log(f"TW input handler: `{inp}`", 9)
+        self.log(f"FileViewer input handler: `{inp}`", 9)
         if inp == "unload":
             self.text = ["No text loaded."]
             self.vpos = 0
@@ -45,7 +45,7 @@ class FileViewer(SubProgTemplate):
             flag = inp[5:]
             setattr(self.flags, flag, not getattr(self.flags, flag))
         else:
-            self.log(f"TW: Unrecognized input `{inp}`.", 5)
+            self.log(f"FileViewer: Unrecognized input `{inp}`.", 5)
 
     def handleKeypress(self, keypress):
         if keypress == "KEY_UP":

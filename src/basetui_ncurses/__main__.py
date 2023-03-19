@@ -2,6 +2,7 @@ __version__ = "0.0.1"
 pkgname = "basetui_ncurses"
 
 import sys
+import os
 
 extras = {"meta": {"dev": False}, "application": {}}
 is_bad = False
@@ -29,7 +30,11 @@ from . import application
 from .subprog import FileViewer
 
 application.main(
-    metainfo={"version": __version__, "pkgname": pkgname},
+    metainfo={
+        "version": __version__,
+        "pkgname": pkgname,
+        "program_config_dir": os.path.expanduser("~/.basetui_ncurses_example"),
+    },
     extras=extras,
     pobj=FileViewer(),
 )

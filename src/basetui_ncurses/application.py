@@ -262,18 +262,18 @@ class Application:
 
 
 def main(metainfo, extras, pobj):
-    TWTUI_DIR = pathlib.Path(os.path.expanduser("~")) / ".twtui"
-    if not os.path.exists(TWTUI_DIR):
+    PROJ_DIR = pathlib.Path(metainfo["program_config_dir"])
+    if not os.path.exists(PROJ_DIR):
         inp = input(
-            f"TWTUI directory ({TWTUI_DIR}) does not exist. Would you like to "
-            f"create it? (y/n) "
+            f"{metainfo['pkgname']} config directory ({PROJ_DIR}) does not "
+            f"exist. Would you like to create it? (y/n) "
         ).lower()
         if inp == "y":
-            os.mkdir(TWTUI_DIR)
+            os.mkdir(PROJ_DIR)
         if inp == "n":
             print(f"Unable to continue without a program directory.")
             return
-    LOG_LOC = TWTUI_DIR / "current.log"
+    LOG_LOC = PROJ_DIR / "current.log"
 
     def submain(stdscr):
         curses.curs_set(0)
@@ -286,14 +286,18 @@ def main(metainfo, extras, pobj):
                 pobj=pobj,
                 **extapp,
             )
+            # This try/finally ensures that all app logs are written. We DON'T
+            #   catch exceptions here as we wouldn't capture init errors.
             try:
                 app.run()
-            except Exception as e:
-                exc = f"ERROR:\n{type(e)}\n{e}\n" + traceback.format_exc()
-                app.log(exc, 1)
-                raise e
             finally:
                 app.flush_logbuffer()
+        except Exception as e:
+            with open(LOG_LOC, "a") as f:
+                f.write(
+                    LH() + f"ERROR:\n{type(e)}\n{e}\n" + traceback.format_exc()
+                )
+            raise e
         finally:
             curses.curs_set(1)
 

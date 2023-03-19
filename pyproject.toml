@@ -6,3 +6,6 @@ version = "0.0.1"
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.package-data]
+basetui_ncurses = ["resource/*.json"]
