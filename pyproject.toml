@@ -1,7 +1,7 @@
 [project]
 name = "basetui_ncurses"
 description = """A wrapper for your code to simplify writing ncurses applications, with a provided example."""
-version = "0.0.1"
+version = "0.0.2"
 
 [build-system]
 requires = ["setuptools"]
